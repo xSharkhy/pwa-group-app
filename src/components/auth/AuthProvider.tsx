@@ -20,28 +20,53 @@ export function AuthProvider({ children }: AuthProviderProps) {
   useEffect(() => {
     let mounted = true;
 
-    async function initializeAuth() {
-      try {
-        // Get initial session with timeout
-        const timeoutPromise = new Promise<never>((_, reject) =>
-          setTimeout(() => reject(new Error('Session timeout')), 10000)
-        );
+    // Listen for auth changes FIRST - this catches the SIGNED_IN event from magic link
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (!mounted) return;
 
-        const sessionPromise = supabase.auth.getSession();
-        const { data: { session }, error: sessionError } = await Promise.race([
-          sessionPromise,
-          timeoutPromise,
-        ]) as Awaited<typeof sessionPromise>;
+      console.log('Auth state changed:', event, session?.user?.email);
 
-        if (!mounted) return;
+      setSession(session);
+      setUser(session?.user ?? null);
 
-        if (sessionError) {
-          console.error('Session error:', sessionError);
-          setLoading(false);
-          setInitialized(true);
-          return;
+      if (event === 'SIGNED_OUT') {
+        reset();
+        setInitialized(true);
+        return;
+      }
+
+      if (session?.user) {
+        try {
+          const profile = await getProfile(session.user.id);
+          if (mounted) setProfile(profile);
+        } catch (err) {
+          console.log('Profile not found (new user):', err);
+          if (mounted) setProfile(null);
         }
+      }
 
+      if (mounted) {
+        setLoading(false);
+        setInitialized(true);
+      }
+    });
+
+    // Then get initial session (for page refresh scenarios)
+    supabase.auth.getSession().then(async ({ data: { session }, error }) => {
+      if (!mounted) return;
+
+      if (error) {
+        console.error('Get session error:', error);
+        setLoading(false);
+        setInitialized(true);
+        return;
+      }
+
+      // Only update if onAuthStateChange hasn't already set initialized
+      const currentState = useAuthStore.getState();
+      if (!currentState.initialized) {
         setSession(session);
         setUser(session?.user ?? null);
 
@@ -49,8 +74,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
           try {
             const profile = await getProfile(session.user.id);
             if (mounted) setProfile(profile);
-          } catch (profileError) {
-            console.log('Profile fetch failed (might be new user):', profileError);
+          } catch {
             if (mounted) setProfile(null);
           }
         }
@@ -59,42 +83,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
           setLoading(false);
           setInitialized(true);
         }
-      } catch (error) {
-        console.error('Auth initialization error:', error);
-        if (mounted) {
-          setLoading(false);
-          setInitialized(true);
-        }
       }
-    }
-
-    initializeAuth();
-
-    // Listen for auth changes
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (!mounted) return;
-
-      console.log('Auth state changed:', event);
-      setSession(session);
-      setUser(session?.user ?? null);
-
-      if (event === 'SIGNED_OUT') {
-        reset();
-        return;
-      }
-
-      if (session?.user) {
-        try {
-          const profile = await getProfile(session.user.id);
-          if (mounted) setProfile(profile);
-        } catch {
-          if (mounted) setProfile(null);
-        }
-      }
-
-      if (mounted) setLoading(false);
     });
 
     return () => {
