@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button, Input, Card, LanguageSwitcher } from '@/components/ui';
 import { useTranslation } from '@/lib/i18n';
 import {
@@ -7,12 +7,48 @@ import {
   signInWithMagicLink,
 } from '@/lib/auth';
 
+const ERROR_MESSAGES: Record<string, Record<string, string>> = {
+  otp_expired: {
+    ca: "L'enllaç ha expirat. Torna a sol·licitar-ne un de nou.",
+    gl: "O enlace expirou. Volve solicitar un novo.",
+  },
+  access_denied: {
+    ca: "Accés denegat. Torna-ho a provar.",
+    gl: "Acceso denegado. Volve tentalo.",
+  },
+  auth_failed: {
+    ca: "Error d'autenticació. Torna-ho a provar.",
+    gl: "Erro de autenticación. Volve tentalo.",
+  },
+  rate_limit: {
+    ca: "Massa intents. Espera un minut i torna-ho a provar.",
+    gl: "Demasiados intentos. Agarda un minuto e volve tentalo.",
+  },
+};
+
 export function LoginForm() {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState<string | null>(null);
   const [magicLinkSent, setMagicLinkSent] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Check for error in URL params on mount
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const errorCode = params.get('error');
+
+    if (errorCode) {
+      const errorMsg = ERROR_MESSAGES[errorCode]?.[locale] ||
+        ERROR_MESSAGES[errorCode]?.ca ||
+        decodeURIComponent(params.get('message') || '') ||
+        t('errors.generic');
+      setError(errorMsg);
+
+      // Clean up URL
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+  }, [locale, t]);
 
   const handleGoogleLogin = async () => {
     try {
@@ -49,9 +85,15 @@ export function LoginForm() {
       setError(null);
       await signInWithMagicLink(email);
       setMagicLinkSent(true);
-    } catch (err) {
-      setError(t('errors.generic'));
+    } catch (err: unknown) {
       console.error(err);
+      const errorMessage = err instanceof Error ? err.message : '';
+
+      if (errorMessage.includes('rate limit')) {
+        setError(ERROR_MESSAGES.rate_limit[locale] || ERROR_MESSAGES.rate_limit.ca);
+      } else {
+        setError(t('errors.generic'));
+      }
     } finally {
       setLoading(null);
     }

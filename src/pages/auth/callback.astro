@@ -23,6 +23,18 @@ import Layout from '../../layouts/Layout.astro';
       try {
         // First, check if there's a hash with tokens (magic link / OAuth)
         const hashParams = new URLSearchParams(window.location.hash.substring(1));
+
+        // Check for error in hash (e.g., expired OTP)
+        const error = hashParams.get('error');
+        const errorDescription = hashParams.get('error_description');
+
+        if (error) {
+          console.error('Auth error:', error, errorDescription);
+          const errorMsg = encodeURIComponent(errorDescription || error);
+          window.location.href = `/?error=${error}&message=${errorMsg}`;
+          return;
+        }
+
         const accessToken = hashParams.get('access_token');
         const refreshToken = hashParams.get('refresh_token');
 
