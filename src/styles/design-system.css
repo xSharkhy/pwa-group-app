@@ -1,0 +1,263 @@
+@import "tailwindcss";
+
+/* ============================================
+   GRUP D'AMICS DESIGN SYSTEM
+   "Mediterranean Warmth meets Digital Scrapbook"
+   ============================================ */
+
+/* ---------- CUSTOM FONTS ---------- */
+/* Vollkorn: Warm, readable serif for headings - feels personal, like a journal */
+/* DM Sans: Friendly, rounded sans-serif for body - approachable, modern */
+@import url('https://fonts.googleapis.com/css2?family=Vollkorn:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap');
+
+/* ---------- CSS VARIABLES ---------- */
+:root {
+  /* Color Palette - Mediterranean Sunset */
+  --color-sun: #F4A261;           /* Warm orange - primary accent */
+  --color-sun-light: #FCDBB7;     /* Soft peach */
+  --color-sun-dark: #E76F51;      /* Burnt sienna - CTA, important actions */
+
+  --color-sea: #2A9D8F;           /* Teal - secondary accent */
+  --color-sea-light: #8ED1C8;     /* Soft aqua */
+  --color-sea-dark: #1D7A6E;      /* Deep teal */
+
+  --color-sand: #FDF6EC;          /* Warm white - primary background */
+  --color-sand-dark: #F5E6D3;     /* Darker sand - cards, surfaces */
+  --color-terracotta: #D4A373;    /* Earthy brown - borders, subtle elements */
+
+  --color-ink: #264653;           /* Deep blue-gray - primary text */
+  --color-ink-light: #4A6670;     /* Lighter text */
+  --color-ink-muted: #8B9DA5;     /* Muted text, placeholders */
+
+  --color-cream: #FFFCF7;         /* Off-white - highlights */
+  --color-paper: #FEF9F3;         /* Paper texture base */
+
+  /* Semantic Colors */
+  --color-success: #52B788;
+  --color-warning: #F4A261;
+  --color-error: #E63946;
+
+  /* Typography Scale */
+  --font-display: 'Vollkorn', Georgia, serif;
+  --font-body: 'DM Sans', -apple-system, sans-serif;
+
+  --text-xs: 0.75rem;     /* 12px */
+  --text-sm: 0.875rem;    /* 14px */
+  --text-base: 1rem;      /* 16px */
+  --text-lg: 1.125rem;    /* 18px */
+  --text-xl: 1.25rem;     /* 20px */
+  --text-2xl: 1.5rem;     /* 24px */
+  --text-3xl: 1.875rem;   /* 30px */
+  --text-4xl: 2.25rem;    /* 36px */
+  --text-5xl: 3rem;       /* 48px */
+
+  /* Spacing Scale */
+  --space-1: 0.25rem;     /* 4px */
+  --space-2: 0.5rem;      /* 8px */
+  --space-3: 0.75rem;     /* 12px */
+  --space-4: 1rem;        /* 16px */
+  --space-5: 1.25rem;     /* 20px */
+  --space-6: 1.5rem;      /* 24px */
+  --space-8: 2rem;        /* 32px */
+  --space-10: 2.5rem;     /* 40px */
+  --space-12: 3rem;       /* 48px */
+  --space-16: 4rem;       /* 64px */
+
+  /* Border Radius - Soft, organic shapes */
+  --radius-sm: 0.375rem;  /* 6px */
+  --radius-md: 0.75rem;   /* 12px */
+  --radius-lg: 1rem;      /* 16px */
+  --radius-xl: 1.5rem;    /* 24px */
+  --radius-2xl: 2rem;     /* 32px */
+  --radius-full: 9999px;
+
+  /* Shadows - Warm, soft */
+  --shadow-sm: 0 1px 2px rgba(38, 70, 83, 0.06);
+  --shadow-md: 0 4px 12px rgba(38, 70, 83, 0.08);
+  --shadow-lg: 0 8px 24px rgba(38, 70, 83, 0.12);
+  --shadow-xl: 0 16px 48px rgba(38, 70, 83, 0.16);
+  --shadow-glow: 0 0 24px rgba(244, 162, 97, 0.3);
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms ease;
+  --transition-slow: 400ms ease;
+  --transition-bounce: 500ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ---------- BASE STYLES ---------- */
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: 1.6;
+  color: var(--color-ink);
+  background-color: var(--color-sand);
+  background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-blend-mode: soft-light;
+  background-size: 200px;
+}
+
+/* ---------- TYPOGRAPHY ---------- */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--color-ink);
+}
+
+.text-display {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.text-body {
+  font-family: var(--font-body);
+  font-weight: 400;
+}
+
+/* Handwritten accent - for special moments */
+.text-accent {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+}
+
+/* ---------- PAPER TEXTURE OVERLAY ---------- */
+.paper-texture {
+  position: relative;
+}
+
+.paper-texture::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23grain)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+/* ---------- ANIMATIONS ---------- */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(-1deg); }
+  50% { transform: rotate(1deg); }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse-warm {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(244, 162, 97, 0.4); }
+  50% { box-shadow: 0 0 0 12px rgba(244, 162, 97, 0); }
+}
+
+.animate-float { animation: float 3s ease-in-out infinite; }
+.animate-wiggle { animation: wiggle 2s ease-in-out infinite; }
+.animate-fade-in-up { animation: fadeInUp 0.5s ease-out forwards; }
+.animate-scale-in { animation: scaleIn 0.3s ease-out forwards; }
+.animate-slide-in-right { animation: slideInRight 0.4s ease-out forwards; }
+.animate-pulse-warm { animation: pulse-warm 2s ease-in-out infinite; }
+
+/* Staggered animations for lists */
+.stagger-1 { animation-delay: 50ms; }
+.stagger-2 { animation-delay: 100ms; }
+.stagger-3 { animation-delay: 150ms; }
+.stagger-4 { animation-delay: 200ms; }
+.stagger-5 { animation-delay: 250ms; }
+
+/* ---------- SCROLLBAR ---------- */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-sand-dark);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-terracotta);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-ink-muted);
+}
+
+/* ---------- SELECTION ---------- */
+::selection {
+  background-color: var(--color-sun-light);
+  color: var(--color-ink);
+}
+
+/* ---------- FOCUS STATES ---------- */
+:focus-visible {
+  outline: 2px solid var(--color-sun);
+  outline-offset: 2px;
+}
+
+/* ---------- LEAFLET OVERRIDES ---------- */
+.leaflet-container {
+  font-family: var(--font-body);
+  background: var(--color-sand-dark);
+}
+
+.leaflet-popup-content-wrapper {
+  background: var(--color-cream);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--color-terracotta);
+}
+
+.leaflet-popup-tip {
+  background: var(--color-cream);
+  border: 1px solid var(--color-terracotta);
+}
+
+.custom-marker {
+  background: transparent !important;
+  border: none !important;
+}

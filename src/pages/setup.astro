@@ -1,0 +1,19 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Configura el teu perfil">
+  <div id="setup-app" class="min-h-screen flex items-center justify-center px-4"></div>
+
+  <script>
+    import { createElement } from 'react';
+    import { createRoot } from 'react-dom/client';
+    import { SetupPage } from '../components/SetupPage';
+
+    const container = document.getElementById('setup-app');
+    if (container) {
+      const root = createRoot(container);
+      root.render(createElement(SetupPage));
+    }
+  </script>
+</Layout>

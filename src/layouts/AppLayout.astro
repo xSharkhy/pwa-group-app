@@ -1,0 +1,44 @@
+---
+import Layout from './Layout.astro';
+
+interface Props {
+  title: string;
+  showBack?: boolean;
+  backUrl?: string;
+}
+
+const { title, showBack = false, backUrl = '/' } = Astro.props;
+---
+
+<Layout title={title}>
+  <div class="min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="sticky top-0 z-40 bg-white border-b border-gray-200">
+      <div class="max-w-4xl mx-auto px-4 h-14 flex items-center gap-3">
+        {showBack && (
+          <a
+            href={backUrl}
+            class="p-2 -ml-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+          >
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+          </a>
+        )}
+        <h1 class="font-semibold text-gray-900 truncate">{title}</h1>
+        <div class="flex-1" />
+        <slot name="header-actions" />
+      </div>
+    </header>
+
+    <!-- Main content -->
+    <main class="flex-1">
+      <div class="max-w-4xl mx-auto px-4 py-6">
+        <slot />
+      </div>
+    </main>
+
+    <!-- Bottom navigation (optional slot) -->
+    <slot name="bottom-nav" />
+  </div>
+</Layout>

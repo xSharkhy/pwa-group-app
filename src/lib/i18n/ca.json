@@ -1,0 +1,248 @@
+{
+  "common": {
+    "save": "Guardar",
+    "cancel": "Cancel\u00b7lar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "create": "Crear",
+    "loading": "Carregant...",
+    "error": "Error",
+    "success": "Fet!",
+    "back": "Tornar",
+    "next": "Seg\u00fcent",
+    "close": "Tancar",
+    "confirm": "Confirmar",
+    "yes": "S\u00ed",
+    "no": "No",
+    "search": "Cercar",
+    "share": "Compartir",
+    "download": "Descarregar"
+  },
+  "auth": {
+    "login": {
+      "title": "Entra al teu grup",
+      "subtitle": "Tria com vols entrar",
+      "google": "Continuar amb Google",
+      "spotify": "Continuar amb Spotify",
+      "email": "Entrar amb email",
+      "emailPlaceholder": "el.teu@email.com",
+      "sendMagicLink": "Enviar enlla\u00e7 m\u00e0gic",
+      "magicLinkSent": "Revisa el teu correu! T'hem enviat un enlla\u00e7 per entrar.",
+      "passkey": "Entrar amb biometria",
+      "or": "o"
+    },
+    "logout": "Sortir",
+    "setup": {
+      "title": "Configura el teu perfil",
+      "subtitle": "Com vols que et coneguem?",
+      "displayName": "Nom",
+      "displayNamePlaceholder": "El teu nom o sobrenom",
+      "avatar": "Foto de perfil",
+      "locale": "Idioma",
+      "localeOption": {
+        "ca": "Catal\u00e0",
+        "gl": "Galego"
+      },
+      "passkey": {
+        "title": "Acc\u00e9s r\u00e0pid",
+        "description": "Configura la biometria per entrar m\u00e9s r\u00e0pid la pr\u00f2xima vegada",
+        "setup": "Configurar biometria",
+        "skip": "Ara no"
+      },
+      "finish": "Comencem!"
+    }
+  },
+  "groups": {
+    "title": "Els teus grups",
+    "empty": {
+      "title": "Encara no est\u00e0s a cap grup",
+      "subtitle": "Crea un grup nou o uneix-te amb un codi d'invitaci\u00f3",
+      "createCta": "Crear grup",
+      "joinCta": "Tinc un codi"
+    },
+    "create": {
+      "title": "Crea un grup nou",
+      "subtitle": "Organitza les quedades amb els teus amics",
+      "name": "Nom del grup",
+      "namePlaceholder": "Els millors amics",
+      "description": "Descripci\u00f3 (opcional)",
+      "descriptionPlaceholder": "Que sigui curt i molti!",
+      "submit": "Crear grup"
+    },
+    "join": {
+      "title": "Unir-se a un grup",
+      "subtitle": "Introdueix el codi d'invitaci\u00f3",
+      "codePlaceholder": "ABCD1234",
+      "submit": "Unir-me",
+      "invalidCode": "Aquest codi no \u00e9s v\u00e0lid o ha expirat",
+      "alreadyMember": "Ja ets membre d'aquest grup!",
+      "groupFull": "Aquest grup ja est\u00e0 ple"
+    },
+    "invite": {
+      "title": "Convida amics",
+      "generateCode": "Generar codi",
+      "code": "Codi d'invitaci\u00f3",
+      "expires": "Expira en {days} dies",
+      "copy": "Copiar enlla\u00e7",
+      "copied": "Copiat!",
+      "share": "Compartir",
+      "active": "Invitacions actives"
+    },
+    "settings": {
+      "title": "Configuraci\u00f3 del grup",
+      "members": "Membres",
+      "categories": "Categories",
+      "danger": "Zona perillosa",
+      "leave": "Sortir del grup",
+      "delete": "Eliminar grup"
+    },
+    "role": {
+      "admin": "Admin",
+      "member": "Membre"
+    }
+  },
+  "places": {
+    "title": "Llocs",
+    "empty": {
+      "title": "Encara no hi ha llocs",
+      "subtitle": "Afegeix el primer lloc al mapa!",
+      "cta": "Afegir lloc"
+    },
+    "add": {
+      "title": "Afegir lloc",
+      "name": "Nom",
+      "namePlaceholder": "El millor bar del m\u00f3n",
+      "description": "Descripci\u00f3",
+      "descriptionPlaceholder": "Per qu\u00e8 ens agrada?",
+      "address": "Adre\u00e7a",
+      "addressPlaceholder": "Cerca una adre\u00e7a...",
+      "category": "Categoria",
+      "status": "Estat",
+      "url": "Enlla\u00e7 (opcional)",
+      "urlPlaceholder": "https://...",
+      "submit": "Afegir"
+    },
+    "status": {
+      "queremos_ir": "Volem anar",
+      "hemos_ido": "Hem anat",
+      "pendiente": "Pendent"
+    },
+    "detail": {
+      "photos": "Fotos",
+      "comments": "Comentaris",
+      "directions": "Com arribar"
+    }
+  },
+  "photos": {
+    "title": "Fotos",
+    "upload": {
+      "title": "Pujar fotos",
+      "dragDrop": "Arrossega les fotos aqu\u00ed o fes clic per seleccionar",
+      "processing": "Processant...",
+      "uploading": "Pujant...",
+      "consent": "Permet compartir al recap setmanal",
+      "associatePlace": "Associar a un lloc",
+      "selectPlace": "Selecciona un lloc...",
+      "submit": "Pujar {count} fotos"
+    },
+    "empty": {
+      "title": "Encara no hi ha fotos",
+      "subtitle": "Puja les fotos de les vostres quedades!",
+      "cta": "Pujar fotos"
+    },
+    "delete": {
+      "confirm": "Segur que vols eliminar aquesta foto?"
+    },
+    "filters": {
+      "week": "Setmana",
+      "place": "Lloc",
+      "user": "Persona"
+    }
+  },
+  "recap": {
+    "title": "Recap",
+    "weekOf": "Setmana del {date}",
+    "empty": {
+      "title": "Encara no hi ha recaps",
+      "subtitle": "El primer recap es generar\u00e0 quan hi hagi activitat!"
+    },
+    "stats": {
+      "photos": "Fotos",
+      "contributors": "Participants",
+      "meetups": "Quedades"
+    },
+    "meetup": {
+      "title": "Quedada detectada",
+      "who": "Qui hi era?",
+      "confirm": "Confirmar",
+      "confirmed": "Confirmada"
+    },
+    "export": {
+      "pdf": "Exportar PDF",
+      "personal": "El meu recap",
+      "group": "Recap del grup"
+    }
+  },
+  "voting": {
+    "title": "Votacions",
+    "propose": {
+      "title": "Proposa un pla",
+      "place": "On?",
+      "placePlaceholder": "Tria un lloc o escriu...",
+      "date": "Quan?",
+      "time": "A quina hora?",
+      "pretext": "Per a qu\u00e8?",
+      "submit": "Proposar"
+    },
+    "pretext": {
+      "almuerzo": "Esmorzar",
+      "comida": "Dinar",
+      "cena": "Sopar",
+      "tardeo": "Tardeo",
+      "otro": "Altre"
+    },
+    "results": {
+      "title": "Resultats",
+      "votes": "{count} vots",
+      "winner": "Guanyador!"
+    },
+    "empty": {
+      "title": "Cap proposta encara",
+      "subtitle": "Sigues el primer en proposar un pla!"
+    }
+  },
+  "stats": {
+    "title": "Estad\u00edstiques",
+    "ranking": "Ranking",
+    "myProgress": "El meu progr\u00e9s",
+    "groupStats": "Estad\u00edstiques del grup",
+    "badges": "Insigns",
+    "score": "Puntuaci\u00f3"
+  },
+  "notifications": {
+    "title": "Notificacions",
+    "empty": "No tens notificacions",
+    "markRead": "Marcar com a llegida",
+    "permission": {
+      "title": "Activa les notificacions",
+      "description": "Rep avisos quan hi hagi activitat al grup",
+      "allow": "Activar",
+      "later": "M\u00e9s tard"
+    }
+  },
+  "profile": {
+    "title": "El meu perfil",
+    "edit": "Editar perfil",
+    "data": {
+      "export": "Exportar les meves dades",
+      "delete": "Eliminar el meu compte",
+      "deleteConfirm": "Segur? Aix\u00f2 \u00e9s irreversible."
+    }
+  },
+  "errors": {
+    "generic": "Alguna cosa ha fallat. Torna-ho a provar.",
+    "network": "Problema de connexi\u00f3. Comprova la teva xarxa.",
+    "unauthorized": "No tens perm\u00eds per fer aix\u00f2.",
+    "notFound": "No hem trobat el que busques."
+  }
+}

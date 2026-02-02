@@ -1,0 +1,22 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+
+const { groupId } = Astro.params;
+---
+
+<Layout title="Grup">
+  <div id="group-app" data-group-id={groupId} class="min-h-screen"></div>
+
+  <script>
+    import { createElement } from 'react';
+    import { createRoot } from 'react-dom/client';
+    import { GroupPage } from '../../../components/GroupPage';
+
+    const container = document.getElementById('group-app');
+    if (container) {
+      const groupId = container.dataset.groupId;
+      const root = createRoot(container);
+      root.render(createElement(GroupPage, { groupId }));
+    }
+  </script>
+</Layout>

@@ -1,0 +1,248 @@
+{
+  "common": {
+    "save": "Gardar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "create": "Crear",
+    "loading": "Cargando...",
+    "error": "Erro",
+    "success": "Feito!",
+    "back": "Volver",
+    "next": "Seguinte",
+    "close": "Pechar",
+    "confirm": "Confirmar",
+    "yes": "Si",
+    "no": "Non",
+    "search": "Buscar",
+    "share": "Compartir",
+    "download": "Descargar"
+  },
+  "auth": {
+    "login": {
+      "title": "Entra no teu grupo",
+      "subtitle": "Escolle como queres entrar",
+      "google": "Continuar con Google",
+      "spotify": "Continuar con Spotify",
+      "email": "Entrar con email",
+      "emailPlaceholder": "o.teu@email.com",
+      "sendMagicLink": "Enviar enlace m\u00e1xico",
+      "magicLinkSent": "Revisa o teu correo! Enviamosche un enlace para entrar.",
+      "passkey": "Entrar con biometr\u00eda",
+      "or": "ou"
+    },
+    "logout": "Sa\u00edr",
+    "setup": {
+      "title": "Configura o teu perfil",
+      "subtitle": "Como queres que te coe\u00f1ezamos?",
+      "displayName": "Nome",
+      "displayNamePlaceholder": "O teu nome ou alcume",
+      "avatar": "Foto de perfil",
+      "locale": "Idioma",
+      "localeOption": {
+        "ca": "Catal\u00e1n",
+        "gl": "Galego"
+      },
+      "passkey": {
+        "title": "Acceso r\u00e1pido",
+        "description": "Configura a biometr\u00eda para entrar m\u00e1is r\u00e1pido a pr\u00f3xima vez",
+        "setup": "Configurar biometr\u00eda",
+        "skip": "Agora non"
+      },
+      "finish": "Comezamos!"
+    }
+  },
+  "groups": {
+    "title": "Os teus grupos",
+    "empty": {
+      "title": "A\u00ednda non est\u00e1s en ning\u00fan grupo",
+      "subtitle": "Crea un grupo novo ou \u00fanete cun c\u00f3digo de invitaci\u00f3n",
+      "createCta": "Crear grupo",
+      "joinCta": "Te\u00f1o un c\u00f3digo"
+    },
+    "create": {
+      "title": "Crea un grupo novo",
+      "subtitle": "Organiza as quedadas cos teus amigos",
+      "name": "Nome do grupo",
+      "namePlaceholder": "Os mellores amigos",
+      "description": "Descripci\u00f3n (opcional)",
+      "descriptionPlaceholder": "Que sexa curto e mole!",
+      "submit": "Crear grupo"
+    },
+    "join": {
+      "title": "Unirse a un grupo",
+      "subtitle": "Introduce o c\u00f3digo de invitaci\u00f3n",
+      "codePlaceholder": "ABCD1234",
+      "submit": "Unirme",
+      "invalidCode": "Este c\u00f3digo non \u00e9 v\u00e1lido ou expirou",
+      "alreadyMember": "Xa es membro deste grupo!",
+      "groupFull": "Este grupo xa est\u00e1 cheo"
+    },
+    "invite": {
+      "title": "Convida amigos",
+      "generateCode": "Xerar c\u00f3digo",
+      "code": "C\u00f3digo de invitaci\u00f3n",
+      "expires": "Expira en {days} d\u00edas",
+      "copy": "Copiar enlace",
+      "copied": "Copiado!",
+      "share": "Compartir",
+      "active": "Invitaci\u00f3ns activas"
+    },
+    "settings": {
+      "title": "Configuraci\u00f3n do grupo",
+      "members": "Membros",
+      "categories": "Categor\u00edas",
+      "danger": "Zona perigosa",
+      "leave": "Sa\u00edr do grupo",
+      "delete": "Eliminar grupo"
+    },
+    "role": {
+      "admin": "Admin",
+      "member": "Membro"
+    }
+  },
+  "places": {
+    "title": "Lugares",
+    "empty": {
+      "title": "A\u00ednda non hai lugares",
+      "subtitle": "Engade o primeiro lugar ao mapa!",
+      "cta": "Engadir lugar"
+    },
+    "add": {
+      "title": "Engadir lugar",
+      "name": "Nome",
+      "namePlaceholder": "O mellor bar do mundo",
+      "description": "Descripci\u00f3n",
+      "descriptionPlaceholder": "Por que nos gusta?",
+      "address": "Direcci\u00f3n",
+      "addressPlaceholder": "Busca unha direcci\u00f3n...",
+      "category": "Categor\u00eda",
+      "status": "Estado",
+      "url": "Enlace (opcional)",
+      "urlPlaceholder": "https://...",
+      "submit": "Engadir"
+    },
+    "status": {
+      "queremos_ir": "Queremos ir",
+      "hemos_ido": "Fomos",
+      "pendiente": "Pendente"
+    },
+    "detail": {
+      "photos": "Fotos",
+      "comments": "Comentarios",
+      "directions": "Como chegar"
+    }
+  },
+  "photos": {
+    "title": "Fotos",
+    "upload": {
+      "title": "Subir fotos",
+      "dragDrop": "Arrastra as fotos aqu\u00ed ou fai clic para seleccionar",
+      "processing": "Procesando...",
+      "uploading": "Subindo...",
+      "consent": "Permitir compartir no recap semanal",
+      "associatePlace": "Asociar a un lugar",
+      "selectPlace": "Selecciona un lugar...",
+      "submit": "Subir {count} fotos"
+    },
+    "empty": {
+      "title": "A\u00ednda non hai fotos",
+      "subtitle": "Sube as fotos das vosas quedadas!",
+      "cta": "Subir fotos"
+    },
+    "delete": {
+      "confirm": "Seguro que queres eliminar esta foto?"
+    },
+    "filters": {
+      "week": "Semana",
+      "place": "Lugar",
+      "user": "Persoa"
+    }
+  },
+  "recap": {
+    "title": "Recap",
+    "weekOf": "Semana do {date}",
+    "empty": {
+      "title": "A\u00ednda non hai recaps",
+      "subtitle": "O primeiro recap xerarase cando haxa actividade!"
+    },
+    "stats": {
+      "photos": "Fotos",
+      "contributors": "Participantes",
+      "meetups": "Quedadas"
+    },
+    "meetup": {
+      "title": "Quedada detectada",
+      "who": "Quen estivo?",
+      "confirm": "Confirmar",
+      "confirmed": "Confirmada"
+    },
+    "export": {
+      "pdf": "Exportar PDF",
+      "personal": "O meu recap",
+      "group": "Recap do grupo"
+    }
+  },
+  "voting": {
+    "title": "Votaci\u00f3ns",
+    "propose": {
+      "title": "Prop\u00f3n un plan",
+      "place": "Onde?",
+      "placePlaceholder": "Escolle un lugar ou escribe...",
+      "date": "Cando?",
+      "time": "A que hora?",
+      "pretext": "Para que?",
+      "submit": "Propor"
+    },
+    "pretext": {
+      "almuerzo": "Almorzo",
+      "comida": "Xantar",
+      "cena": "Cea",
+      "tardeo": "Tardeo",
+      "otro": "Outro"
+    },
+    "results": {
+      "title": "Resultados",
+      "votes": "{count} votos",
+      "winner": "Ga\u00f1ador!"
+    },
+    "empty": {
+      "title": "Ningunha proposta a\u00ednda",
+      "subtitle": "Se o primeiro en propor un plan!"
+    }
+  },
+  "stats": {
+    "title": "Estat\u00edsticas",
+    "ranking": "Ranking",
+    "myProgress": "O meu progreso",
+    "groupStats": "Estat\u00edsticas do grupo",
+    "badges": "Insignias",
+    "score": "Puntuaci\u00f3n"
+  },
+  "notifications": {
+    "title": "Notificaci\u00f3ns",
+    "empty": "Non tes notificaci\u00f3ns",
+    "markRead": "Marcar como lida",
+    "permission": {
+      "title": "Activa as notificaci\u00f3ns",
+      "description": "Recibe avisos cando haxa actividade no grupo",
+      "allow": "Activar",
+      "later": "M\u00e1is tarde"
+    }
+  },
+  "profile": {
+    "title": "O meu perfil",
+    "edit": "Editar perfil",
+    "data": {
+      "export": "Exportar os meus datos",
+      "delete": "Eliminar a mi\u00f1a conta",
+      "deleteConfirm": "Seguro? Isto \u00e9 irreversible."
+    }
+  },
+  "errors": {
+    "generic": "Algo fallou. Volve tentalo.",
+    "network": "Problema de conexi\u00f3n. Comproba a t\u00faa rede.",
+    "unauthorized": "Non tes permiso para facer isto.",
+    "notFound": "Non atopamos o que buscas."
+  }
+}
