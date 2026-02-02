@@ -27,7 +27,8 @@
       "email": "Entrar amb email",
       "emailPlaceholder": "el.teu@email.com",
       "sendMagicLink": "Enviar enlla\u00e7 m\u00e0gic",
-      "magicLinkSent": "Revisa el teu correu! T'hem enviat un enlla\u00e7 per entrar.",
+      "magicLinkSent": "Revisa el teu correu!",
+      "checkEmail": "T'hem enviat un enllaç màgic. Comprova la safata d'entrada i spam.",
       "passkey": "Entrar amb biometria",
       "or": "o"
     },

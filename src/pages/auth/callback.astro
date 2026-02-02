@@ -3,42 +3,123 @@ import Layout from '../../layouts/Layout.astro';
 ---
 
 <Layout title="Autenticant...">
-  <div class="min-h-screen flex items-center justify-center">
+  <div class="min-h-screen flex items-center justify-center bg-[var(--color-sand)]">
     <div class="text-center">
-      <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-600 mx-auto mb-4"></div>
-      <p class="text-gray-600">Autenticant...</p>
+      <div class="relative w-16 h-16 mx-auto mb-4">
+        <div class="absolute inset-0 rounded-full bg-[var(--color-sun)] animate-pulse" />
+        <div class="absolute inset-2 rounded-full bg-[var(--color-sun-light)] animate-pulse" style="animation-delay: 150ms" />
+        <div class="absolute inset-4 rounded-full bg-[var(--color-cream)]" />
+      </div>
+      <p class="text-[var(--color-ink-muted)]" id="status-text">Autenticant...</p>
     </div>
   </div>
 
   <script>
     import { supabase } from '../../lib/supabase';
 
-    // Handle the OAuth callback
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) {
-        // Check if user needs setup
-        supabase
+    const statusText = document.getElementById('status-text');
+
+    async function handleAuthCallback() {
+      try {
+        // First, check if there's a hash with tokens (magic link / OAuth)
+        const hashParams = new URLSearchParams(window.location.hash.substring(1));
+        const accessToken = hashParams.get('access_token');
+        const refreshToken = hashParams.get('refresh_token');
+
+        // If we have tokens in the hash, set the session manually
+        if (accessToken && refreshToken) {
+          if (statusText) statusText.textContent = 'Validant sessió...';
+
+          const { data, error } = await supabase.auth.setSession({
+            access_token: accessToken,
+            refresh_token: refreshToken,
+          });
+
+          if (error) {
+            console.error('Error setting session:', error);
+            window.location.href = '/?error=auth_failed';
+            return;
+          }
+
+          if (data.session) {
+            await handleSession(data.session);
+            return;
+          }
+        }
+
+        // Check for code-based auth (PKCE flow)
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('code');
+
+        if (code) {
+          if (statusText) statusText.textContent = 'Intercanviant codi...';
+
+          const { data, error } = await supabase.auth.exchangeCodeForSession(code);
+
+          if (error) {
+            console.error('Error exchanging code:', error);
+            window.location.href = '/?error=auth_failed';
+            return;
+          }
+
+          if (data.session) {
+            await handleSession(data.session);
+            return;
+          }
+        }
+
+        // Fallback: try to get existing session
+        if (statusText) statusText.textContent = 'Comprovant sessió...';
+
+        const { data: { session } } = await supabase.auth.getSession();
+
+        if (session) {
+          await handleSession(session);
+        } else {
+          // No session found, redirect to login
+          console.log('No session found');
+          window.location.href = '/';
+        }
+      } catch (error) {
+        console.error('Auth callback error:', error);
+        window.location.href = '/?error=auth_failed';
+      }
+    }
+
+    async function handleSession(session: { user: { id: string } }) {
+      if (statusText) statusText.textContent = 'Carregant perfil...';
+
+      // Small delay to ensure the profile trigger has run
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      try {
+        const { data: profile, error } = await supabase
           .from('profiles')
           .select('display_name')
           .eq('id', session.user.id)
-          .single()
-          .then(({ data: profile }) => {
-            if (profile && profile.display_name) {
-              // Profile exists and is complete, go to home
-              window.location.href = '/';
-            } else {
-              // Need to setup profile
-              window.location.href = '/setup';
-            }
-          })
-          .catch(() => {
-            // Profile doesn't exist yet, go to setup
-            window.location.href = '/setup';
-          });
-      } else {
-        // No session, go back to login
-        window.location.href = '/';
+          .single();
+
+        if (error) {
+          console.log('Profile fetch error (might be new user):', error.message);
+          // Profile might not exist yet or other error - go to setup
+          window.location.href = '/setup';
+          return;
+        }
+
+        if (profile && profile.display_name && profile.display_name !== profile.display_name.split('@')[0]) {
+          // Profile exists and has a custom display_name (not just email prefix)
+          window.location.href = '/';
+        } else {
+          // Need to setup profile
+          window.location.href = '/setup';
+        }
+      } catch (err) {
+        console.error('Profile check error:', err);
+        window.location.href = '/setup';
       }
-    });
+    }
+
+    // Run the callback handler
+    handleAuthCallback();
   </script>
 </Layout>

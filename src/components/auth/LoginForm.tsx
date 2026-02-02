@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Input, Card } from '@/components/ui';
+import { Button, Input, Card, LanguageSwitcher } from '@/components/ui';
 import { useTranslation } from '@/lib/i18n';
 import {
   signInWithGoogle,
@@ -241,10 +241,10 @@ export function LoginForm() {
         </div>
       </Card>
 
-      {/* Footer note */}
-      <p className="text-center text-xs text-[var(--color-ink-muted)] mt-6">
-        En continuar, acceptes compartir moments amb els teus amics 🌅
-      </p>
+      {/* Language Switcher */}
+      <div className="flex justify-center mt-6">
+        <LanguageSwitcher variant="pill" />
+      </div>
     </div>
   );
 }

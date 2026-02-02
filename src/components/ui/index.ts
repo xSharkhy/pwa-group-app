@@ -9,3 +9,4 @@ export { Badge, AchievementBadge } from './Badge';
 export { Tag, CategoryTag } from './Tag';
 export { Skeleton, SkeletonText, SkeletonCard, SkeletonPhotoGrid, SkeletonList } from './Skeleton';
 export { EmptyState, EmptyGroups, EmptyPlaces, EmptyPhotos, EmptyRecaps } from './EmptyState';
+export { LanguageSwitcher } from './LanguageSwitcher';

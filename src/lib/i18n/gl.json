@@ -27,8 +27,9 @@
       "email": "Entrar con email",
       "emailPlaceholder": "o.teu@email.com",
       "sendMagicLink": "Enviar enlace m\u00e1xico",
-      "magicLinkSent": "Revisa o teu correo! Enviamosche un enlace para entrar.",
-      "passkey": "Entrar con biometr\u00eda",
+      "magicLinkSent": "Revisa o teu correo!",
+      "checkEmail": "Enviamosche un enlace máxico. Comproba a caixa de entrada e spam.",
+      "passkey": "Entrar con biometría",
       "or": "ou"
     },
     "logout": "Sa\u00edr",
