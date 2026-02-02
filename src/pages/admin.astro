@@ -1,0 +1,19 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Admin">
+  <div id="admin-app" class="min-h-screen"></div>
+
+  <script>
+    import { createElement } from 'react';
+    import { createRoot } from 'react-dom/client';
+    import { AdminPage } from '../components/AdminPage';
+
+    const container = document.getElementById('admin-app');
+    if (container) {
+      const root = createRoot(container);
+      root.render(createElement(AdminPage));
+    }
+  </script>
+</Layout>
