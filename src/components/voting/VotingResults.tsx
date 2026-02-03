@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/hooks/useAuth';
 import { VoteCard } from './VoteCard';
@@ -71,20 +71,27 @@ export function VotingResults({ groupId, weekStart, closed }: VotingResultsProps
 
       if (error) throw error;
 
-      // Group votes by place
+      // Batch fetch all places in ONE query (eliminates N+1)
+      const placeIds = [...new Set((data || []).map(v => v.place_id).filter(Boolean))] as string[];
+      const placesMap = new Map<string, string>();
+
+      if (placeIds.length > 0) {
+        const { data: places } = await supabase
+          .from('places')
+          .select('id, name')
+          .in('id', placeIds);
+
+        places?.forEach(p => placesMap.set(p.id, p.name));
+      }
+
+      // Group votes by place (no more individual queries)
       const voteMap = new Map<string, AggregatedVote>();
 
       for (const vote of data || []) {
-        // Get place name
-        let placeName = vote.place_text || 'Lloc desconegut';
-        if (vote.place_id) {
-          const { data: place } = await supabase
-            .from('places')
-            .select('name')
-            .eq('id', vote.place_id)
-            .single();
-          if (place) placeName = place.name;
-        }
+        // Get place name from pre-fetched map
+        const placeName = vote.place_id
+          ? placesMap.get(vote.place_id) || vote.place_text || 'Lloc desconegut'
+          : vote.place_text || 'Lloc desconegut';
 
         const key = vote.place_id || vote.place_text || 'unknown';
 
@@ -195,7 +202,7 @@ export function VotingResults({ groupId, weekStart, closed }: VotingResultsProps
     );
   }
 
-  const totalVotes = votes.reduce((sum, v) => sum + v.votes_count, 0);
+  const totalVotes = useMemo(() => votes.reduce((sum, v) => sum + v.votes_count, 0), [votes]);
 
   return (
     <div className="space-y-4">

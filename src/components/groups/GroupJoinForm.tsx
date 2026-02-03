@@ -44,26 +44,26 @@ export function GroupJoinForm({
         return;
       }
 
-      // Check if already a member
-      const { data: existingMember } = await supabase
-        .from('group_members')
-        .select('id')
-        .eq('group_id', invite.group_id)
-        .eq('user_id', user.id)
-        .single();
+      // PARALLEL: Check membership and group capacity simultaneously
+      const [memberCheck, capacityCheck] = await Promise.all([
+        supabase
+          .from('group_members')
+          .select('id')
+          .eq('group_id', invite.group_id)
+          .eq('user_id', user.id)
+          .maybeSingle(),
+        supabase
+          .from('group_members')
+          .select('*', { count: 'exact', head: true })
+          .eq('group_id', invite.group_id),
+      ]);
 
-      if (existingMember) {
+      if (memberCheck.data) {
         setError(t('groups.join.alreadyMember'));
         return;
       }
 
-      // Check group capacity
-      const { count } = await supabase
-        .from('group_members')
-        .select('*', { count: 'exact', head: true })
-        .eq('group_id', invite.group_id);
-
-      if (count && invite.group && count >= invite.group.max_members) {
+      if (capacityCheck.count && invite.group && capacityCheck.count >= invite.group.max_members) {
         setError(t('groups.join.groupFull'));
         return;
       }
@@ -79,20 +79,20 @@ export function GroupJoinForm({
 
       if (memberError) throw memberError;
 
-      // Mark invite as used
-      await supabase
-        .from('group_invites')
-        .update({
-          used_at: new Date().toISOString(),
-          used_by: user.id,
-        })
-        .eq('id', invite.id);
-
-      // Initialize user stats for this group
-      await supabase.from('user_stats').insert({
-        user_id: user.id,
-        group_id: invite.group_id,
-      });
+      // PARALLEL: Mark invite as used AND initialize stats simultaneously
+      await Promise.all([
+        supabase
+          .from('group_invites')
+          .update({
+            used_at: new Date().toISOString(),
+            used_by: user.id,
+          })
+          .eq('id', invite.id),
+        supabase.from('user_stats').insert({
+          user_id: user.id,
+          group_id: invite.group_id,
+        }),
+      ]);
 
       onSuccess(invite.group_id);
     } catch (err) {

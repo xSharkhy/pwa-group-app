@@ -117,7 +117,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
       mountedRef.current = false;
       subscription.unsubscribe();
     };
-  }, [setSession, setUser, setProfile, setLoading, setInitialized, reset]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // Zustand setters are stable, no need to include in deps
+  }, []);
 
   return <>{children}</>;
 }

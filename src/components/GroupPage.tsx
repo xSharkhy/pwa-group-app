@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, lazy, Suspense } from 'react';
 import { I18nProvider, getLocaleFromBrowser } from '@/lib/i18n';
 import { ToastProvider } from '@/components/ui/Toast';
 import { AuthProvider } from '@/components/auth/AuthProvider';
@@ -7,13 +7,28 @@ import { useGroup } from '@/hooks/useGroups';
 import { usePlaces } from '@/hooks/usePlaces';
 import { usePhotos } from '@/hooks/usePhotos';
 import { useTranslation } from '@/lib/i18n';
-import { Modal, Button, Avatar } from '@/components/ui';
-import { MapView, PlaceMarker, PlaceForm } from '@/components/map';
+import { Modal, Button, Avatar, Skeleton } from '@/components/ui';
+import { PlaceMarker, PlaceForm } from '@/components/map';
 import { PhotoUploader, PhotoGallery } from '@/components/photos';
 import { InviteManager } from '@/components/groups';
 import { RecapFeed } from '@/components/recap';
 import { VotingForm, VotingResults } from '@/components/voting';
 import type { LatLng } from 'leaflet';
+
+// Lazy load MapView to defer Leaflet bundle (~160KB)
+const MapView = lazy(() => import('@/components/map/MapView').then(m => ({ default: m.MapView })));
+
+// Loading fallback for map
+function MapSkeleton() {
+  return (
+    <div className="flex-1 bg-[var(--color-sand-dark)] flex items-center justify-center">
+      <div className="text-center">
+        <Skeleton className="w-16 h-16 rounded-full mx-auto mb-3" />
+        <Skeleton className="w-32 h-4 mx-auto" />
+      </div>
+    </div>
+  );
+}
 
 interface GroupPageProps {
   groupId: string;
@@ -172,17 +187,19 @@ function GroupContent({ groupId }: GroupPageProps) {
       <main className="flex-1 flex flex-col">
         {activeTab === 'map' && (
           <div className="flex-1 relative">
-            <MapView onMapLongPress={handleMapLongPress}>
-              {places.map((place) => (
-                <PlaceMarker
-                  key={place.id}
-                  place={place}
-                  onClick={() => {
-                    window.location.href = `/groups/${groupId}/places/${place.id}`;
-                  }}
-                />
-              ))}
-            </MapView>
+            <Suspense fallback={<MapSkeleton />}>
+              <MapView onMapLongPress={handleMapLongPress}>
+                {places.map((place) => (
+                  <PlaceMarker
+                    key={place.id}
+                    place={place}
+                    onClick={() => {
+                      window.location.href = `/groups/${groupId}/places/${place.id}`;
+                    }}
+                  />
+                ))}
+              </MapView>
+            </Suspense>
             <button
               onClick={() => setShowPlaceForm(true)}
               className="
