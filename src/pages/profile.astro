@@ -1,0 +1,19 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="El meu perfil">
+  <div id="profile-app" class="min-h-screen"></div>
+
+  <script>
+    import { createElement } from 'react';
+    import { createRoot } from 'react-dom/client';
+    import { ProfilePage } from '../components/ProfilePage';
+
+    const container = document.getElementById('profile-app');
+    if (container) {
+      const root = createRoot(container);
+      root.render(createElement(ProfilePage));
+    }
+  </script>
+</Layout>

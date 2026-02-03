@@ -48,7 +48,10 @@ function AppContent() {
   if (!profile || !profile.display_name) {
     return (
       <div className="min-h-screen flex items-center justify-center px-4 bg-[var(--color-sand)]">
-        <ProfileSetupForm onComplete={() => window.location.reload()} />
+        <ProfileSetupForm onComplete={() => {
+          // Reload to refresh profile state
+          window.location.href = '/';
+        }} />
       </div>
     );
   }
