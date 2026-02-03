@@ -40,13 +40,15 @@ export function InviteManager({ groupId }: InviteManagerProps) {
   }, [groupId]);
 
   const fetchInvites = async () => {
+    // Only fetch needed columns and limit to recent invites
     const { data, error } = await supabase
       .from('group_invites')
-      .select('*')
+      .select('id, code, expires_at, created_at')
       .eq('group_id', groupId)
       .is('used_at', null)
       .gt('expires_at', new Date().toISOString())
-      .order('created_at', { ascending: false });
+      .order('created_at', { ascending: false })
+      .limit(10); // Limit to 10 most recent active invites
 
     if (!error) {
       setInvites(data || []);
@@ -64,6 +66,7 @@ export function InviteManager({ groupId }: InviteManagerProps) {
       const expiresAt = new Date();
       expiresAt.setDate(expiresAt.getDate() + 7); // 7 days
 
+      // Only return needed columns
       const { data, error } = await supabase
         .from('group_invites')
         .insert({
@@ -72,7 +75,7 @@ export function InviteManager({ groupId }: InviteManagerProps) {
           created_by: user.id,
           expires_at: expiresAt.toISOString(),
         })
-        .select()
+        .select('id, code, expires_at, created_at')
         .single();
 
       if (error) throw error;

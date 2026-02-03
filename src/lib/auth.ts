@@ -68,9 +68,10 @@ export function onAuthStateChange(callback: (session: Session | null) => void) {
 }
 
 export async function getProfile(userId: string) {
+  // Only select needed columns to avoid over-fetching
   const { data, error } = await supabase
     .from('profiles')
-    .select('*')
+    .select('id, email, display_name, avatar_url, locale_preference, created_at')
     .eq('id', userId)
     .maybeSingle();
 
@@ -90,11 +91,12 @@ export async function updateProfile(
     locale_preference?: 'ca' | 'gl';
   }
 ) {
+  // Only return needed columns
   const { data, error } = await supabase
     .from('profiles')
     .update(updates)
     .eq('id', userId)
-    .select()
+    .select('id, email, display_name, avatar_url, locale_preference, created_at')
     .single();
 
   if (error) throw error;
@@ -110,6 +112,7 @@ export async function upsertProfile(
     locale_preference?: 'ca' | 'gl';
   }
 ) {
+  // Only return needed columns
   const { data, error } = await supabase
     .from('profiles')
     .upsert({
@@ -121,7 +124,7 @@ export async function upsertProfile(
     }, {
       onConflict: 'id',
     })
-    .select()
+    .select('id, email, display_name, avatar_url, locale_preference, created_at')
     .single();
 
   if (error) {

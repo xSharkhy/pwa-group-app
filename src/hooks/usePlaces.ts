@@ -28,12 +28,14 @@ export function usePlaces(groupId: string | undefined) {
     async function fetchPlaces() {
       setLoading(true);
 
+      // Only fetch needed columns to reduce payload
       const { data, error } = await supabase
         .from('places')
         .select(
           `
-          *,
-          category:categories(*)
+          id, group_id, name, description, lat, lng, address,
+          category_id, created_by, status, external_url, created_at, updated_at,
+          category:categories(id, name, name_gl, icon_name, color)
         `
         )
         .eq('group_id', groupId)

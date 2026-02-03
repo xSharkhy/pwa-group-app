@@ -32,9 +32,10 @@ export function RecapFeed({ groupId, onRecapClick }: RecapFeedProps) {
   useEffect(() => {
     async function fetchRecaps() {
       try {
+        // Select only needed columns - summary is large JSONB, fetch only what's needed for list
         const { data, error } = await supabase
           .from('weekly_recaps')
-          .select('*')
+          .select('id, week_start, week_end, published, summary')
           .eq('group_id', groupId)
           .eq('published', true)
           .order('week_start', { ascending: false })
