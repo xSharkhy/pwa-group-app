@@ -4,13 +4,16 @@ import Layout from '../../layouts/Layout.astro';
 
 <Layout title="Autenticant...">
   <div class="min-h-screen flex items-center justify-center bg-[var(--color-sand)]">
-    <div class="text-center">
+    <div class="text-center max-w-sm mx-auto px-4">
       <div class="relative w-16 h-16 mx-auto mb-4">
         <div class="absolute inset-0 rounded-full bg-[var(--color-sun)] animate-pulse" />
         <div class="absolute inset-2 rounded-full bg-[var(--color-sun-light)] animate-pulse" style="animation-delay: 150ms" />
         <div class="absolute inset-4 rounded-full bg-[var(--color-cream)]" />
       </div>
-      <p class="text-[var(--color-ink-muted)]" id="status-text">Autenticant...</p>
+      <p class="text-[var(--color-ink-muted)] mb-2" id="status-text">Autenticant...</p>
+      <p class="text-[var(--color-ink-muted)] text-sm opacity-0 transition-opacity duration-300" id="close-hint">
+        Si ja has iniciat sessió a una altra pestanya, pots tancar aquesta.
+      </p>
     </div>
   </div>
 
@@ -130,6 +133,12 @@ import Layout from '../../layouts/Layout.astro';
         window.location.href = '/setup';
       }
     }
+
+    // Show hint after 3 seconds
+    setTimeout(() => {
+      const hint = document.getElementById('close-hint');
+      if (hint) hint.style.opacity = '1';
+    }, 3000);
 
     // Run the callback handler
     handleAuthCallback();

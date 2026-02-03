@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import { Button, Input, Select } from '@/components/ui';
 import { useTranslation } from '@/lib/i18n';
-import { updateProfile } from '@/lib/auth';
+import { upsertProfile } from '@/lib/auth';
 import { uploadAvatar } from '@/lib/storage';
 import { useAuth } from '@/hooks/useAuth';
 
@@ -52,17 +52,22 @@ export function ProfileSetupForm({ onComplete }: ProfileSetupFormProps) {
 
       let avatarUrl: string | null = null;
 
-      // Upload avatar if selected
+      // Upload avatar if selected (skip if no file to avoid storage errors)
       if (avatarFile) {
-        avatarUrl = await uploadAvatar(
-          user.id,
-          avatarFile,
-          avatarFile.name
-        );
+        try {
+          avatarUrl = await uploadAvatar(
+            user.id,
+            avatarFile,
+            avatarFile.name
+          );
+        } catch (uploadErr) {
+          console.error('Avatar upload failed:', uploadErr);
+          // Continue without avatar - don't block profile creation
+        }
       }
 
-      // Update profile
-      await updateProfile(user.id, {
+      // Create or update profile using upsert
+      await upsertProfile(user.id, user.email || '', {
         display_name: displayName.trim(),
         avatar_url: avatarUrl,
         locale_preference: locale,

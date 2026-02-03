@@ -72,9 +72,13 @@ export async function getProfile(userId: string) {
     .from('profiles')
     .select('*')
     .eq('id', userId)
-    .single();
+    .maybeSingle();
 
-  if (error) throw error;
+  // If no profile found, return null instead of throwing
+  if (error && error.code !== 'PGRST116') {
+    console.error('getProfile error:', error);
+    throw error;
+  }
   return data;
 }
 
@@ -97,6 +101,36 @@ export async function updateProfile(
   return data;
 }
 
+export async function upsertProfile(
+  userId: string,
+  email: string,
+  updates: {
+    display_name: string;
+    avatar_url?: string | null;
+    locale_preference?: 'ca' | 'gl';
+  }
+) {
+  const { data, error } = await supabase
+    .from('profiles')
+    .upsert({
+      id: userId,
+      email: email,
+      display_name: updates.display_name,
+      avatar_url: updates.avatar_url || null,
+      locale_preference: updates.locale_preference || 'ca',
+    }, {
+      onConflict: 'id',
+    })
+    .select()
+    .single();
+
+  if (error) {
+    console.error('upsertProfile error:', error);
+    throw error;
+  }
+  return data;
+}
+
 export async function checkProfileExists(userId: string): Promise<boolean> {
   const { data, error } = await supabase
     .from('profiles')
@@ -104,6 +138,6 @@ export async function checkProfileExists(userId: string): Promise<boolean> {
     .eq('id', userId)
     .maybeSingle();
 
-  if (error) throw error;
+  if (error && error.code !== 'PGRST116') throw error;
   return data !== null;
 }
