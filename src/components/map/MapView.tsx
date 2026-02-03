@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { MapContainer, TileLayer, useMap, useMapEvents } from 'react-leaflet';
 import type { LatLng } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -22,9 +22,35 @@ function MapEventHandler({
   onMapClick?: (latlng: LatLng) => void;
   onMapLongPress?: (latlng: LatLng) => void;
 }) {
-  const longPressTimer = useRef<NodeJS.Timeout | null>(null);
+  const longPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pressStart = useRef<LatLng | null>(null);
+  const map = useMap();
 
+  const clearLongPress = () => {
+    if (longPressTimer.current) {
+      clearTimeout(longPressTimer.current);
+      longPressTimer.current = null;
+    }
+    pressStart.current = null;
+  };
+
+  const startLongPress = (latlng: LatLng) => {
+    if (!onMapLongPress) return;
+
+    pressStart.current = latlng;
+    longPressTimer.current = setTimeout(() => {
+      if (pressStart.current) {
+        // Vibrate on mobile for haptic feedback (if supported)
+        if (navigator.vibrate) {
+          navigator.vibrate(50);
+        }
+        onMapLongPress(pressStart.current);
+        clearLongPress();
+      }
+    }, 500);
+  };
+
+  // Handle mouse events (desktop)
   useMapEvents({
     click: (e) => {
       if (onMapClick) {
@@ -32,29 +58,61 @@ function MapEventHandler({
       }
     },
     mousedown: (e) => {
-      if (onMapLongPress) {
-        pressStart.current = e.latlng;
-        longPressTimer.current = setTimeout(() => {
-          if (pressStart.current) {
-            onMapLongPress(pressStart.current);
-          }
-        }, 500);
-      }
+      startLongPress(e.latlng);
     },
-    mouseup: () => {
-      if (longPressTimer.current) {
-        clearTimeout(longPressTimer.current);
-        longPressTimer.current = null;
-      }
-      pressStart.current = null;
-    },
-    mousemove: () => {
-      if (longPressTimer.current) {
-        clearTimeout(longPressTimer.current);
-        longPressTimer.current = null;
-      }
-    },
+    mouseup: clearLongPress,
+    mousemove: clearLongPress,
   });
+
+  // Handle touch events (mobile) - critical for PWA
+  useEffect(() => {
+    const container = map.getContainer();
+
+    const handleTouchStart = (e: TouchEvent) => {
+      if (e.touches.length !== 1) {
+        clearLongPress();
+        return;
+      }
+
+      const touch = e.touches[0];
+      const latlng = map.containerPointToLatLng([touch.clientX - container.getBoundingClientRect().left, touch.clientY - container.getBoundingClientRect().top]);
+      startLongPress(latlng);
+    };
+
+    const handleTouchEnd = () => {
+      clearLongPress();
+    };
+
+    const handleTouchMove = () => {
+      clearLongPress();
+    };
+
+    const handleTouchCancel = () => {
+      clearLongPress();
+    };
+
+    // Prevent context menu on long press (mobile Safari)
+    const handleContextMenu = (e: Event) => {
+      if (onMapLongPress) {
+        e.preventDefault();
+      }
+    };
+
+    container.addEventListener('touchstart', handleTouchStart, { passive: true });
+    container.addEventListener('touchend', handleTouchEnd, { passive: true });
+    container.addEventListener('touchmove', handleTouchMove, { passive: true });
+    container.addEventListener('touchcancel', handleTouchCancel, { passive: true });
+    container.addEventListener('contextmenu', handleContextMenu);
+
+    return () => {
+      container.removeEventListener('touchstart', handleTouchStart);
+      container.removeEventListener('touchend', handleTouchEnd);
+      container.removeEventListener('touchmove', handleTouchMove);
+      container.removeEventListener('touchcancel', handleTouchCancel);
+      container.removeEventListener('contextmenu', handleContextMenu);
+      clearLongPress();
+    };
+  }, [map, onMapLongPress]);
 
   return null;
 }

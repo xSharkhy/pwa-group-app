@@ -8,7 +8,7 @@ import { Button, Input, Card, Avatar, LanguageSwitcher } from '@/components/ui';
 
 function ProfileContent() {
   const { t, locale, setLocale } = useTranslation();
-  const { session, profile, loading, initialized } = useAuthStore();
+  const { session, profile, loading, initialized, setProfile } = useAuthStore();
   const [displayName, setDisplayName] = useState('');
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -20,14 +20,20 @@ function ProfileContent() {
   }, [profile?.display_name]);
 
   const handleSave = async () => {
-    if (!session?.user || !displayName.trim()) return;
+    if (!session?.user || !displayName.trim() || !profile) return;
 
     try {
       setSaving(true);
-      await updateProfile(session.user.id, {
+      const updatedProfile = await updateProfile(session.user.id, {
         display_name: displayName.trim(),
         locale_preference: locale,
       });
+
+      // Sync updated profile with auth store to prevent stale state
+      if (updatedProfile) {
+        setProfile(updatedProfile);
+      }
+
       localStorage.setItem('locale', locale);
       setSaved(true);
       setTimeout(() => setSaved(false), 2000);

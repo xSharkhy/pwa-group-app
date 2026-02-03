@@ -35,5 +35,6 @@ export const useAuthStore = create<AuthState>((set) => ({
       user: null,
       profile: null,
       loading: false,
+      initialized: false, // Reset initialized to allow proper re-initialization on next login
     }),
 }));

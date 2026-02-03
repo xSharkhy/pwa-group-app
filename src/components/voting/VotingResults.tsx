@@ -27,7 +27,9 @@ interface Vote {
 
 interface AggregatedVote {
   id: string;
-  place_name: string;
+  place_id: string | null; // Original place_id for voting
+  place_text: string | null; // Original place_text for voting
+  place_name: string; // Display name (resolved from place_id or place_text)
   proposed_date: string | null;
   proposed_time: string | null;
   pretext: string | null;
@@ -105,6 +107,8 @@ export function VotingResults({ groupId, weekStart, closed }: VotingResultsProps
         } else {
           voteMap.set(key, {
             id: vote.id,
+            place_id: vote.place_id, // Store original place_id for voting
+            place_text: vote.place_text, // Store original place_text for voting
             place_name: placeName,
             proposed_date: vote.proposed_date,
             proposed_time: vote.proposed_time,
@@ -147,13 +151,20 @@ export function VotingResults({ groupId, weekStart, closed }: VotingResultsProps
     const originalVote = votes.find(v => v.id === voteId);
     if (!originalVote) return;
 
+    // Check if user already voted for this option
+    if (originalVote.has_voted) {
+      console.log('User already voted for this option');
+      return;
+    }
+
     try {
+      // Use the original place_id and place_text from the vote
       await supabase.from('weekly_votes').insert({
         group_id: groupId,
         week_start: weekStart,
         user_id: user.id,
-        place_id: originalVote.place_name ? null : voteId, // This is a simplification
-        place_text: originalVote.place_name,
+        place_id: originalVote.place_id, // Use original place_id (can be null)
+        place_text: originalVote.place_text, // Use original place_text (can be null)
         proposed_date: originalVote.proposed_date,
         proposed_time: originalVote.proposed_time,
         pretext: originalVote.pretext,

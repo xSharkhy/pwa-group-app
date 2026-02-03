@@ -35,11 +35,21 @@ interface GroupPageProps {
 }
 
 // Get current week start (Saturday)
+// Week runs Saturday to Friday
 function getCurrentWeekStart(): string {
   const now = new Date();
-  const day = now.getDay();
-  const diff = now.getDate() - day - 1; // Saturday = 6, so we go back to previous Saturday
-  const saturday = new Date(now.setDate(diff));
+  const day = now.getDay(); // 0=Sunday, 1=Monday, ..., 6=Saturday
+
+  // Calculate days to go back to reach the most recent Saturday
+  // If today is Saturday (6), diff is 0
+  // If today is Sunday (0), diff is 1 (go back 1 day)
+  // If today is Monday (1), diff is 2 (go back 2 days)
+  // Formula: if day === 6, diff = 0; else diff = day + 1
+  const daysToSubtract = day === 6 ? 0 : day + 1;
+
+  const saturday = new Date(now);
+  saturday.setDate(now.getDate() - daysToSubtract);
+
   return saturday.toISOString().split('T')[0];
 }
 
