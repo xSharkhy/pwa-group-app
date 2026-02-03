@@ -1,3 +1,4 @@
+import { memo, useMemo } from 'react';
 import { Card, Avatar, AvatarGroup, Badge } from '@/components/ui';
 import { useTranslation } from '@/lib/i18n';
 
@@ -41,9 +42,15 @@ function formatWeekRange(weekStart: string, weekEnd: string, locale: string): st
   return `${startStr} - ${endStr}`;
 }
 
-export function RecapCard({ recap, onClick }: RecapCardProps) {
+export const RecapCard = memo(function RecapCard({ recap, onClick }: RecapCardProps) {
   const { t, locale } = useTranslation();
   const summary = recap.summary;
+
+  // Memoize date formatting to avoid recalculation on re-renders
+  const weekRange = useMemo(
+    () => formatWeekRange(recap.week_start, recap.week_end, locale),
+    [recap.week_start, recap.week_end, locale]
+  );
 
   return (
     <Card
@@ -67,7 +74,7 @@ export function RecapCard({ recap, onClick }: RecapCardProps) {
               className="text-white text-lg font-semibold mt-0.5"
               style={{ fontFamily: 'var(--font-display)' }}
             >
-              {formatWeekRange(recap.week_start, recap.week_end, locale)}
+              {weekRange}
             </p>
           </div>
           {summary && summary.meetups_count > 0 && (
@@ -163,4 +170,4 @@ export function RecapCard({ recap, onClick }: RecapCardProps) {
       </div>
     </Card>
   );
-}
+});

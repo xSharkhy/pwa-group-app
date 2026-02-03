@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
 import { RecapCard } from './RecapCard';
 import { EmptyRecaps, SkeletonCard } from '@/components/ui';
@@ -20,6 +20,14 @@ export function RecapFeed({ groupId, onRecapClick }: RecapFeedProps) {
   const [recaps, setRecaps] = useState<Recap[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Memoize click handler to prevent re-renders of RecapCard
+  const handleRecapClick = useCallback(
+    (recapId: string) => {
+      onRecapClick?.(recapId);
+    },
+    [onRecapClick]
+  );
 
   useEffect(() => {
     async function fetchRecaps() {
@@ -91,7 +99,7 @@ export function RecapFeed({ groupId, onRecapClick }: RecapFeedProps) {
           >
             <RecapCard
               recap={recap}
-              onClick={() => onRecapClick?.(recap.id)}
+              onClick={() => handleRecapClick(recap.id)}
             />
           </div>
         ))}

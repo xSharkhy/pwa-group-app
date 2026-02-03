@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { supabase } from '@/lib/supabase';
 import type { Database } from '@/lib/database.types';
 
@@ -19,6 +19,10 @@ export function usePhotos(
 ) {
   const [photos, setPhotos] = useState<PhotoWithUploader[]>([]);
   const [loading, setLoading] = useState(true);
+
+  // Batch realtime inserts to avoid N+1 queries when multiple photos are uploaded
+  const pendingInsertsRef = useRef<string[]>([]);
+  const batchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     if (!groupId) {
@@ -65,6 +69,24 @@ export function usePhotos(
       setLoading(false);
     }
 
+    // Batch fetch multiple photo IDs in a single query
+    async function processBatchedInserts() {
+      const ids = [...pendingInsertsRef.current];
+      pendingInsertsRef.current = [];
+
+      if (ids.length === 0) return;
+
+      // Single query for all pending inserts (eliminates N+1)
+      const { data: newPhotos } = await supabase
+        .from('photos')
+        .select('*, uploader:profiles!photos_uploaded_by_fkey(*)')
+        .in('id', ids);
+
+      if (newPhotos && newPhotos.length > 0) {
+        setPhotos((prev) => [...newPhotos, ...prev]);
+      }
+    }
+
     fetchPhotos();
 
     // Subscribe to realtime changes
@@ -78,17 +100,15 @@ export function usePhotos(
           table: 'photos',
           filter: `group_id=eq.${groupId}`,
         },
-        async (payload) => {
+        (payload) => {
           if (payload.eventType === 'INSERT') {
-            const { data: newPhoto } = await supabase
-              .from('photos')
-              .select('*, uploader:profiles!photos_uploaded_by_fkey(*)')
-              .eq('id', payload.new.id)
-              .single();
+            // Batch inserts: collect IDs and fetch them together after 100ms
+            pendingInsertsRef.current.push(payload.new.id as string);
 
-            if (newPhoto) {
-              setPhotos((prev) => [newPhoto, ...prev]);
+            if (batchTimeoutRef.current) {
+              clearTimeout(batchTimeoutRef.current);
             }
+            batchTimeoutRef.current = setTimeout(processBatchedInserts, 100);
           } else if (payload.eventType === 'DELETE') {
             setPhotos((prev) => prev.filter((p) => p.id !== payload.old.id));
           }
@@ -97,6 +117,9 @@ export function usePhotos(
       .subscribe();
 
     return () => {
+      if (batchTimeoutRef.current) {
+        clearTimeout(batchTimeoutRef.current);
+      }
       supabase.removeChannel(channel);
     };
   }, [groupId, filters?.weekStart, filters?.placeId, filters?.userId]);

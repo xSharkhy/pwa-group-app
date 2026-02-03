@@ -29,6 +29,7 @@ export function VotingForm({ groupId, weekStart, onSuccess, onCancel }: VotingFo
   const { user } = useAuth();
 
   const [places, setPlaces] = useState<Place[]>([]);
+  const [placesLoading, setPlacesLoading] = useState(true);
   const [selectedPlace, setSelectedPlace] = useState('');
   const [customPlace, setCustomPlace] = useState('');
   const [proposedDate, setProposedDate] = useState('');
@@ -40,6 +41,7 @@ export function VotingForm({ groupId, weekStart, onSuccess, onCancel }: VotingFo
 
   useEffect(() => {
     async function fetchPlaces() {
+      setPlacesLoading(true);
       const { data } = await supabase
         .from('places')
         .select('id, name')
@@ -49,6 +51,7 @@ export function VotingForm({ groupId, weekStart, onSuccess, onCancel }: VotingFo
       if (data) {
         setPlaces(data);
       }
+      setPlacesLoading(false);
     }
 
     fetchPlaces();
@@ -128,13 +131,14 @@ export function VotingForm({ groupId, weekStart, onSuccess, onCancel }: VotingFo
         <div>
           <Select
             label="Lloc"
-            placeholder="Selecciona un lloc..."
+            placeholder={placesLoading ? "Carregant llocs..." : "Selecciona un lloc..."}
             options={places.map(p => ({ value: p.id, label: p.name }))}
             value={selectedPlace}
             onChange={(e) => {
               setSelectedPlace(e.target.value);
               if (e.target.value) setCustomPlace('');
             }}
+            disabled={placesLoading}
           />
           <p className="text-xs text-[var(--color-ink-muted)] mt-2 text-center">o</p>
           <Input
